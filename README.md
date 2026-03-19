@@ -44,6 +44,17 @@ NutriTrack/
 - Xcode 15+
 - Swift 5.9+
 
+## Screenshots
+
+<p float="left">
+  <img src="Screenshots/foto1.png" width="200"/>
+  <img src="Screenshots/foto2.png" width="200"/>
+  <img src="Screenshots/foto3.png" width="200"/>
+  <img src="Screenshots/foto4.png" width="200"/>
+  <img src="Screenshots/foto5.png" width="200"/>
+</p>
+
+
 ## Installation
 1. Clone the repo
 ```bash
