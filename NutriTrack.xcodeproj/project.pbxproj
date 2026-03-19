@@ -10,9 +10,22 @@
 		958927EE2F6B19310053D834 /* NutriTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutriTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		9589281D2F6C0A270053D834 /* Exceptions for "NutriTrack" folder in "NutriTrack" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 958927ED2F6B19310053D834 /* NutriTrack */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		958927F02F6B19310053D834 /* NutriTrack */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9589281D2F6C0A270053D834 /* Exceptions for "NutriTrack" folder in "NutriTrack" target */,
+			);
 			path = NutriTrack;
 			sourceTree = "<group>";
 		};
@@ -257,6 +270,8 @@
 				DEVELOPMENT_TEAM = BPB3BV66JV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Kalori ve besin verilerinizi okumak için";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Kalori ve besin verilerinizi kaydetmek için";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -290,6 +305,8 @@
 				DEVELOPMENT_TEAM = BPB3BV66JV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Kalori ve besin verilerinizi okumak için";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Kalori ve besin verilerinizi kaydetmek için";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

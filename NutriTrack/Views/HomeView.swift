@@ -68,6 +68,26 @@ struct CalorieSummaryCard: View {
             ProgressView(value: viewModel.calorieProgress())
                 .tint(.green)
             
+            HStack{
+                VStack(spacing : 4){
+                    Text("\(Int(viewModel.burnedCalories))")
+                        .font(.headline)
+                        .foregroundStyle(.orange)
+                    Text("Yakılan")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                VStack(spacing: 4) {
+                    Text("\(Int(viewModel.remainingCalories))")
+                        .font(.headline)
+                        .foregroundStyle(viewModel.remainingCalories >= 0 ? .green : .red)
+                    Text("Kalan")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            
             HStack {
                 NutrientLabel(title: "Protein", value: viewModel.totalProtein, color: .blue)
                 Spacer()
