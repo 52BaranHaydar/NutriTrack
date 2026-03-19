@@ -4,6 +4,7 @@
 //
 //  Created by Baran on 19.03.2026.
 //
+
 import SwiftUI
 
 struct FoodSearchView: View {
@@ -14,9 +15,14 @@ struct FoodSearchView: View {
     @State private var selectedMealType: MealEntry.MealType = .breakfast
     @State private var amount: String = "100"
     @State private var selectedFood: FoodItem?
+    @State private var searchResults: [FoodItem] = []
+    @State private var isLoading = false
+    @State private var hasSearched = false
     
-    // Örnek yiyecekler (ileride API'dan gelecek)
-    let sampleFoods: [FoodItem] = [
+    let apiService = FoodAPIService.shared
+    
+    // Varsayılan yiyecekler
+    let defaultFoods: [FoodItem] = [
         FoodItem(name: "Yumurta", calories: 155, protein: 13, carbohydrates: 1.1, fat: 11),
         FoodItem(name: "Tavuk Göğsü", calories: 165, protein: 31, carbohydrates: 0, fat: 3.6),
         FoodItem(name: "Pirinç", calories: 130, protein: 2.7, carbohydrates: 28, fat: 0.3),
@@ -25,17 +31,11 @@ struct FoodSearchView: View {
         FoodItem(name: "Muz", calories: 89, protein: 1.1, carbohydrates: 23, fat: 0.3),
         FoodItem(name: "Süt", calories: 42, protein: 3.4, carbohydrates: 5, fat: 1),
         FoodItem(name: "Yoğurt", calories: 59, protein: 3.5, carbohydrates: 3.6, fat: 3.3),
-        FoodItem(name: "Zeytinyağı", calories: 884, protein: 0, carbohydrates: 0, fat: 100),
         FoodItem(name: "Mercimek", calories: 116, protein: 9, carbohydrates: 20, fat: 0.4),
     ]
     
-    var filteredFoods: [FoodItem] {
-        if searchText.isEmpty {
-            return sampleFoods
-        }
-        return sampleFoods.filter {
-            $0.name.localizedCaseInsensitiveContains(searchText)
-        }
+    var displayedFoods: [FoodItem] {
+        hasSearched ? searchResults : defaultFoods
     }
     
     var body: some View {
@@ -72,9 +72,7 @@ struct FoodSearchView: View {
                                 .keyboardType(.numberPad)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: 100)
-                            
                             Spacer()
-                            
                             if let amountDouble = Double(amount) {
                                 Text("\(Int(food.calories * amountDouble / 100)) kcal")
                                     .foregroundStyle(.green)
@@ -97,16 +95,24 @@ struct FoodSearchView: View {
                     .background(Color(.systemGray6))
                 }
                 
+                // Yükleniyor
+                if isLoading {
+                    ProgressView("Aranıyor...")
+                        .padding()
+                }
+                
                 // Yemek listesi
-                List(filteredFoods) { food in
+                List(displayedFoods) { food in
                     Button {
                         selectedFood = food
+                        amount = "100"
                     } label: {
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(food.name)
                                     .foregroundStyle(.primary)
                                     .font(.headline)
+                                    .lineLimit(1)
                                 Text("P: \(Int(food.protein))g · K: \(Int(food.carbohydrates))g · Y: \(Int(food.fat))g")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
@@ -117,7 +123,17 @@ struct FoodSearchView: View {
                         }
                     }
                 }
+                .listStyle(.plain)
                 .searchable(text: $searchText, prompt: "Yemek ara...")
+                .onSubmit(of: .search) {
+                    Task { await searchFood() }
+                }
+                .onChange(of: searchText) { _, newValue in
+                    if newValue.isEmpty {
+                        hasSearched = false
+                        searchResults = []
+                    }
+                }
             }
             .navigationTitle("Yemek Ekle")
             .navigationBarTitleDisplayMode(.inline)
@@ -125,8 +141,22 @@ struct FoodSearchView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("İptal") { dismiss() }
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Ara") {
+                        Task { await searchFood() }
+                    }
+                    .disabled(searchText.isEmpty)
+                }
             }
         }
+    }
+    
+    func searchFood() async {
+        guard !searchText.isEmpty else { return }
+        isLoading = true
+        hasSearched = true
+        searchResults = await apiService.searchFood(query: searchText)
+        isLoading = false
     }
     
     func addFood(_ food: FoodItem) {
